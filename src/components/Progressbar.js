@@ -1,3 +1,4 @@
+import {Link} from 'react-router-dom'
 import React from "react";
 
 const Progressbar = () => {
@@ -12,12 +13,12 @@ const Progressbar = () => {
                     <div className="progress" style={{ width: "20%" }} />
                 </div>
             </div>
-            <a href="result.html">
+            <Link to="/result">
                 <button className="button next">
                     <span>Next Question</span>
                     <span className="material-icons-outlined"> arrow_forward </span>
                 </button>
-            </a>
+            </Link>
         </div>
     );
 };

@@ -1,4 +1,5 @@
 import React from "react";
+import {Link} from 'react-router-dom';
 import singupImage from "../assets/images/signup.svg";
 import Button from "./Button";
 import Form from "./Form";
@@ -22,7 +23,7 @@ const Login = () => {
 
                     <Button>Submit now</Button>
                     <div className="info">
-                        Don't have an account? <a href="signup.html">Signup</a> instead.
+                        Don't have an account? <Link to="/signup">Signup</Link> instead.
                     </div>
                 </Form>
             </div>
