@@ -1,6 +1,5 @@
 import React from "react";
 import Accounts from "./Accounts";
-import "../styles/nav.css";
 import Logo from "../assets/images/logo.png";
 
 const Nav = () => {
