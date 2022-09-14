@@ -196,7 +196,9 @@ h4 {
 .account > span:last-child {
     cursor: pointer;
 }
-
+.account a {
+    font-size: 14px;
+}
 /* signup component */
 .signup {
     height: 500px;
