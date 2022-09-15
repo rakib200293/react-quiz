@@ -1,18 +1,16 @@
 import React from "react";
 import thambnail from "../assets/images/3.jpg";
 
-const Video = () => {
+const Video = ({ title, id, noq }) => {
     return (
-        <>
-            <div className="video">
-                <img src={thambnail} alt="thambnail" />
-                <p>#23 React Hooks Bangla - React useReducer hook Bangla</p>
-                <div className="qmeta">
-                    <p>10 Questions</p>
-                    <p>Score : Not taken yet</p>
-                </div>
+        <div className="video">
+            <img src={`http://img.youtube.com/vi/${id}/maxresdefault.jpg`} alt={title} />
+            <p>{title}</p>
+            <div className="qmeta">
+                <p>{noq} Questions</p>
+                <p>Total points : {noq * 5}</p>
             </div>
-        </>
+        </div>
     );
 };
 

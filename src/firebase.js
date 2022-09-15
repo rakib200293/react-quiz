@@ -8,6 +8,7 @@ const app = initializeApp({
     storageBucket: "react-quiz-dev-89798.appspot.com",
     messagingSenderId: "381792014050",
     appId: "1:381792014050:web:0afdef7e0c26b571e798bb",
+    databaseURL: "https://react-quiz-dev-89798-default-rtdb.asia-southeast1.firebasedatabase.app",
 });
 
 export default app;
