@@ -6,7 +6,7 @@ const Question = ({ answers = [] }) => {
         <div className="question" key={index}>
             <div className="qtitle">
                 <span className="material-icons-outlined"> help_outline </span>
-                Here goes the question from Learn with Sumit?
+                {answer.title}
             </div>
             <Answers input={false} options={answer.options} />
         </div>
