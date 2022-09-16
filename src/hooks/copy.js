@@ -1,114 +1,51 @@
-import { getDatabase, ref, set } from "firebase/database";
 import _ from "lodash";
-import { useEffect, useReducer, useState } from "react";
 import { useHistory, useParams } from "react-router-dom";
-import { useAuth } from "../../contexts/AuthContext";
-import useQuestions from "../../hooks/useQuestions";
-import Answers from "../Answers";
-import MiniPlayer from "../MiniPlayer";
-import ProgressBar from "../ProgressBar";
+import useAnswers from "../../hooks/useAnswers";
+import Analysis from "../Analysis";
+import Summary from "../Summary";
 
-const initialState = null;
-
-const reducer = (state, action) => {
-    switch (action.type) {
-        case "questions":
-            action.value.forEach((question) => {
-                question.options.forEach((option) => {
-                    option.checked = false;
-                });
-            });
-            return action.value;
-        case "answer":
-            const questions = _.cloneDeep(state);
-            questions[action.questionID].options[action.optionIndex].checked = action.value;
-
-            return questions;
-        default:
-            return state;
-    }
-};
-
-export default function Quiz() {
+export default function Result() {
     const { id } = useParams();
-    const { loading, error, questions } = useQuestions(id);
-    const [currentQuestion, setCurrentQuestion] = useState(0);
+    const { location } = useHistory();
+    const { state } = location;
+    const { qna } = state;
 
-    const [qna, dispatch] = useReducer(reducer, initialState);
-    const { currentUser } = useAuth();
-    const history = useHistory();
+    const { loading, error, answers } = useAnswers(id);
 
-    useEffect(() => {
-        dispatch({
-            type: "questions",
-            value: questions,
-        });
-    }, [questions]);
+    function calculate() {
+        let score = 0;
 
-    function handleAnswerChange(e, index) {
-        dispatch({
-            type: "answer",
-            questionID: currentQuestion,
-            optionIndex: index,
-            value: e.target.checked,
-        });
-    }
+        answers.forEach((question, index1) => {
+            let correctIndexes = [],
+                checkedIndexes = [];
 
-    // handle when user clicks the next button to get the next question
-    function nextQuestion() {
-        if (currentQuestion + 1 < questions.length) {
-            setCurrentQuestion((prevCurrent) => prevCurrent + 1);
-        }
-    }
+            question.options.forEach((option, index2) => {
+                if (option.correct) correctIndexes.push(index2);
+                if (qna[index1].options[index2].checked) {
+                    checkedIndexes.push(index2);
+                    option.checked = true;
+                }
+            });
 
-    // handle when user clicks the prev button to get back to the previous question
-    function prevQuestion() {
-        if (currentQuestion >= 1 && currentQuestion <= questions.length) {
-            setCurrentQuestion((prevCurrent) => prevCurrent - 1);
-        }
-    }
-
-    // submit quiz
-    async function submit() {
-        const { uid } = currentUser;
-
-        const db = getDatabase();
-        const resultRef = ref(db, `result/${uid}`);
-
-        await set(resultRef, {
-            [id]: qna,
+            if (_.isEqual(correctIndexes, checkedIndexes)) {
+                score = score + 5;
+            }
         });
 
-        history.push({
-            pathname: `/result/${id}`,
-            state: {
-                qna,
-            },
-        });
+        return score;
     }
 
-    // calculate percentage of progress
-    const percentage = questions.length > 0 ? ((currentQuestion + 1) / questions.length) * 100 : 0;
+    const userScore = calculate();
 
     return (
         <>
-            {loading && <div>Loading ...</div>}
+            {loading && <div>Loading...</div>}
             {error && <div>There was an error!</div>}
-            {!loading && !error && qna && qna.length > 0 && (
+
+            {answers && answers.length > 0 && (
                 <>
-                    <h1>{qna[currentQuestion].title}</h1>
-                    <h4>Question can have multiple answers</h4>
-                    <Answers
-                        options={qna[currentQuestion].options}
-                        handleChange={handleAnswerChange}
-                    />
-                    <ProgressBar
-                        next={nextQuestion}
-                        prev={prevQuestion}
-                        submit={submit}
-                        progress={percentage}
-                    />
-                    <MiniPlayer />
+                    <Summary score={userScore} noq={answers.length} />
+                    <Analysis answers={answers} />
                 </>
             )}
         </>
