@@ -22,14 +22,15 @@ const Videos = () => {
                     dataLength={videos.length}
                     hasMore={hasMore}
                     next={() => setPage(page + 15)}
+                    loader="Loading..."
                 >
                     {videos.map((video) =>
                         video.noq > 0 ? (
-                            <Link to="/quiz" key={video.youtubeID}>
+                            <Link to={`/quiz/${video.youtubeID}`} key={video.youtubeID}>
                                 <Video title={video.title} id={video.youtubeID} noq={video.noq} />
                             </Link>
                         ) : (
-                            <div onClick={notify}>
+                            <div onClick={notify} key={video.youtubeID}>
                                 <Video title={video.title} id={video.youtubeID} noq={video.noq} />
                                 <ToastContainer />
                             </div>
