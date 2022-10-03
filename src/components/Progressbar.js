@@ -1,7 +1,21 @@
 import { Link } from "react-router-dom";
-import React from "react";
+import React, { useRef, useState } from "react";
 
 const Progressbar = ({ prev, next, progress, submit }) => {
+    const [tooltip, setTooltip] = useState(false);
+    const tooltipRef = useRef();
+
+    function toggleTooltip() {
+        if (tooltip) {
+            setTooltip(false);
+            tooltipRef.current.style.display = "none";
+        } else {
+            setTooltip(true);
+            tooltipRef.current.style.left = `calc(${progress}% - 65px)`;
+            tooltipRef.current.style.display = "block";
+        }
+    }
+
     return (
         <div className="progressBar">
             <div className="backButton">
@@ -10,9 +24,16 @@ const Progressbar = ({ prev, next, progress, submit }) => {
                 </span>
             </div>
             <div className="rangeArea">
-                <div className="tooltip">{progress}% Cimplete!</div>
+                <div className="tooltip" ref={tooltipRef}>
+                    {progress}% Cimplete!
+                </div>
                 <div className="rangeBody">
-                    <div className="progress" style={{ width: `${progress}%` }} />
+                    <div
+                        className="progress"
+                        style={{ width: `${progress}%` }}
+                        onMouseOver={toggleTooltip}
+                        onMouseOut={toggleTooltip}
+                    />
                 </div>
             </div>
 
