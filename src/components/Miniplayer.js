@@ -1,10 +1,11 @@
 import React, { useState } from "react";
 import { useRef } from "react";
-import image from "../assets/images/3.jpg";
+import ReactPlayer from "react-player";
 
-const Miniplayer = () => {
+const Miniplayer = ({ title, id }) => {
     const buttonRef = useRef();
     const [status, setStatus] = useState(false);
+    const videoUrl = `https://www.youtube.com/watch?v=${id}`;
 
     function toggleMiniplayer() {
         if (!status) {
@@ -23,8 +24,15 @@ const Miniplayer = () => {
                 {" "}
                 close{" "}
             </span>
-            <img src={image} alt="imags" />
-            <p>#23 React Hooks Bangla - React useReducer hook Bangla</p>
+            <ReactPlayer
+                className="player"
+                url={videoUrl}
+                width="300px"
+                height="168px"
+                playing={status}
+                controls
+            />
+            <p>{title}</p>
         </div>
     );
 };

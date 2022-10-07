@@ -187,7 +187,9 @@
     object-fit: cover;
     animation: miniplayerAnim 0.3s ease forwards;
 }
-
+.miniPlayer.floatingBtn .player {
+    display: none;
+}
 .open {
     display: none;
 }
